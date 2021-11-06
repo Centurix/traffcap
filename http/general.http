@@ -1,0 +1,30 @@
+GET {{host}}/r/MTYzNjE4NTQ1MTc0Mg HTTP/1.1
+Accept-Version: 3
+###
+POST {{host}}/endpoints HTTP/1.1
+###
+GET {{host}}/endpoints HTTP/1.1
+###
+GET {{host}}/docs HTTP/1.1
+###
+GET {{host}}/openapi.json HTTP/1.1
+###
+GET {{host}}/endpoints/MTYzNjE4NTQ1MTc0Mg HTTP/1.1
+###
+GET {{host}}/r/MTYzNjE4NTQ1MTc0Mg?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+###
+POST {{host}}/r/MTYzNjE4NTQ1MTc0Mg?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+Content-Type: application/json
+
+{
+    "data": {
+        "id": 1,
+        "type": "extracts",
+        "attributes": {
+            "name": "Chris"
+        }
+    }
+}
+###

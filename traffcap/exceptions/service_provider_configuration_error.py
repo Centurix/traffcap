@@ -1,0 +1,2 @@
+class ServiceProviderConfigurationError(Exception):
+    pass
