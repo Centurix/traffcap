@@ -1,23 +1,18 @@
 from .repository import Repository
 from fastapi import Request
-from traffcap.dto import Scope
+from traffcap.dto import InboundRequest
 
 
-class RequestRepository(Repository):
+class InboundRequestRepository(Repository):
     @classmethod
     async def save_request(cls, code: str, request: Request) -> None:
         # HTTP information
         # * method
         # * Base URL
         # * Headers
-        scope = Scope(**request.scope)
+        inbound_request = await InboundRequest.from_request(code, request)
 
-        # Now deal with the body
-        body = await request.body()
-
-        # Serialize and store
-        print(scope)
-        print(body)
+        test = inbound_request.scope.json()
 
         await cls.execute(f"""
 INSERT INTO requests (
@@ -33,4 +28,9 @@ INSERT INTO requests (
     ?,
     ?
 )
-""", (code,str(scope.json()),body))
+""",
+    (
+        code,
+        inbound_request.scope.json(),
+        inbound_request.body
+    ))

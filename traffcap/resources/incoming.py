@@ -9,7 +9,7 @@ from fastapi.responses import (
 )
 from traffcap.repositories import (
     EndpointRepository,
-    RequestRepository
+    InboundRequestRepository
 )
 
 
@@ -58,7 +58,7 @@ async def record_get(endpoint_code: str, request: Request) -> JSONResponse:
     # * Body
     # Send notifications
     # Return a response
-    await RequestRepository.save_request(endpoint_code, request)
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({"endpoint_code": endpoint_code})
 
 
@@ -68,7 +68,7 @@ async def record_post(endpoint_code: str, request: Request) -> JSONResponse:
     """
     POST on the endpoint
     """
-    await RequestRepository.save_request(endpoint_code, request)
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({"endpoint_code": endpoint_code})
 
 
@@ -78,6 +78,7 @@ async def record_put(endpoint_code: str, request: Request) -> JSONResponse:
     """
     PUT on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})
 
 
@@ -87,6 +88,7 @@ async def record_patch(endpoint_code: str, request: Request) -> JSONResponse:
     """
     PATCH on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})
 
 
@@ -96,6 +98,7 @@ async def delete(endpoint_code: str, request: Request) -> JSONResponse:
     """
     DELETE on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})
 
 
@@ -105,6 +108,7 @@ async def record_options(endpoint_code: str, request: Request) -> JSONResponse:
     """
     OPTIONS on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})
 
 
@@ -114,6 +118,7 @@ async def record_trace(endpoint_code: str, request: Request) -> JSONResponse:
     """
     TRACE on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})
 
 
@@ -123,4 +128,5 @@ async def record_head(endpoint_code: str, request: Request) -> JSONResponse:
     """
     HEAD on the endpoint
     """
+    await InboundRequestRepository.save_request(endpoint_code, request)
     return JSONResponse({})

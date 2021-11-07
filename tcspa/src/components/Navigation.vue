@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-navigation-drawer v-model="drawer" app >
+    <v-navigation-drawer v-model="drawer" app permanent>
       <v-sheet class="pa-4" >
         <v-img :src="require('../assets/traffcap_logo_615x112.png')"></v-img>
       </v-sheet>

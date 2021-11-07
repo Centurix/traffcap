@@ -8,7 +8,6 @@ from fastapi import (
 )
 from traffcap.endpoints import generate_code
 from traffcap.repositories import EndpointRepository
-from fastapi.responses import JSONResponse
 from traffcap.libs.pydantic_jsonapi import JsonApiModel  # Factory
 from traffcap.dto.endpoint import Endpoint
 

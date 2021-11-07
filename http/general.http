@@ -1,4 +1,4 @@
-GET {{host}}/r/MTYzNjE4NTQ1MTc0Mg HTTP/1.1
+GET {{host}}/r/MTYzNjE5MTUxMzQyNw HTTP/1.1
 Accept-Version: 3
 ###
 POST {{host}}/endpoints HTTP/1.1
@@ -9,12 +9,12 @@ GET {{host}}/docs HTTP/1.1
 ###
 GET {{host}}/openapi.json HTTP/1.1
 ###
-GET {{host}}/endpoints/MTYzNjE4NTQ1MTc0Mg HTTP/1.1
+GET {{host}}/endpoints/MTYzNjE5MTUxMzQyNw HTTP/1.1
 ###
-GET {{host}}/r/MTYzNjE4NTQ1MTc0Mg?id=2&stuff=abcd HTTP/1.1
+GET {{host}}/r/MTYzNjE5MTUxMzQyNw?id=2&stuff=abcd HTTP/1.1
 Accept-Version: 3
 ###
-POST {{host}}/r/MTYzNjE4NTQ1MTc0Mg?id=2&stuff=abcd HTTP/1.1
+POST {{host}}/r/MTYzNjE5MTUxMzQyNw?id=2&stuff=abcd HTTP/1.1
 Accept-Version: 3
 Content-Type: application/json
 
@@ -27,4 +27,8 @@ Content-Type: application/json
         }
     }
 }
+###
+GET {{host}}/endpoints/MTYzNjE5MTUxMzQyNw/requests HTTP/1.1
+###
+GET {{host}}/requests HTTP/1.1
 ###
