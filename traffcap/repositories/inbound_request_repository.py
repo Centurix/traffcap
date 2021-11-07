@@ -1,3 +1,7 @@
+from typing import (
+    List,
+    Optional
+)
 from .repository import Repository
 from fastapi import Request
 from traffcap.dto import InboundRequest
@@ -34,3 +38,20 @@ INSERT INTO requests (
         inbound_request.scope.json(),
         inbound_request.body
     ))
+
+    @classmethod
+    async def list_requests(cls) -> Optional[List[InboundRequest]]:
+        return await cls.execute(
+            """
+SELECT
+    id,
+    code,
+    created,
+    modified,
+    scope,
+    body
+FROM
+    requests
+""",
+            row_factory=InboundRequest
+        )
