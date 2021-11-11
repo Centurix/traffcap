@@ -9,7 +9,6 @@ from .row_factory import RowFactory
 from pydantic import BaseModel
 from datetime import datetime
 from fastapi import Request
-from traffcap.dto import Scope
 
 
 class InboundRequest(BaseModel, RowFactory):
