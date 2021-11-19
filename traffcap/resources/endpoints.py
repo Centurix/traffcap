@@ -1,15 +1,18 @@
+import asyncio
 from typing import (
     List,
     Dict
 )
 from fastapi import (
     APIRouter,
-    HTTPException
+    HTTPException,
+    WebSocket
 )
 from traffcap.endpoints import generate_code
 from traffcap.repositories import EndpointRepository
 from traffcap.libs.pydantic_jsonapi import JsonApiModel  # Factory
 from traffcap.dto.endpoint import Endpoint
+from time import sleep
 
 
 endpoints_router = APIRouter(prefix="/endpoints", tags=["Endpoint Management"])
@@ -60,3 +63,15 @@ async def create_endpoint() -> EndpointResponse:
             attributes=endpoint
         )
     )
+
+@endpoints_router.websocket("/requests/{endpoint_code}/ws")
+async def websocket_endpoint(websocket: WebSocket, endpoint_code: str):
+    """
+    Send messages to the client for the nominated endpoint
+    """
+    await websocket.accept()
+
+    while True:
+        # Find new messages and send them on
+        await asyncio.sleep(5)
+        await websocket.send_text("New message!")

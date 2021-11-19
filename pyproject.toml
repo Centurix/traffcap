@@ -12,6 +12,7 @@ aiosqlite = "^0.17.0"
 mypy = "^0.910"
 yoyo-migrations = "^7.3.2"
 gunicorn = "^20.1.0"
+websockets = "^10.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

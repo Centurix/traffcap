@@ -98,7 +98,9 @@
             <div>
               <v-card-title class="text-h5" >TRACE http://localhost:8080/r/MTYzNjE4NDk4NTU5NQ</v-card-title>
               <v-card-subtitle></v-card-subtitle>
-              <v-card-actions></v-card-actions>
+              <v-card-actions>
+                <v-btn @click="sendMessage()" small color="primary">Click Me!</v-btn>
+              </v-card-actions>
             </div>
           </div>
         </v-card>
@@ -115,5 +117,23 @@ export default Vue.extend({
   components: {},
   data: () => ({
   }),
+  created: function() {
+    console.log("Starting websocket connection")
+    this.connection = new WebSocket("ws://localhost:8000/requests/abcdefg/ws")
+    this.connection.onmessage = function (event) {
+      console.log("On message")
+      console.log(event)
+    }
+    this.connection.onopen = function (event) {
+      console.log("On open")
+      console.log(event)
+    }
+  },
+  methods: {
+    sendMessage: function() {
+      console.log("Sending a message")
+      this.connection.send('{"data": {"type": "messages", "id": "abcdefg"}}')
+    }
+  }
 })
 </script>

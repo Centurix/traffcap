@@ -2,10 +2,7 @@ from typing import (
     List,
     Dict
 )
-from fastapi import (
-    APIRouter,
-    HTTPException
-)
+from fastapi import APIRouter
 from traffcap.repositories import InboundRequestRepository
 from traffcap.libs.pydantic_jsonapi import JsonApiModel  # Factory
 from traffcap.dto import InboundRequest
@@ -30,3 +27,4 @@ async def get_all_requests() -> List[Dict[str, object]]:
             attributes=inbound_request
         ) for inbound_request in inbound_requests]
     )
+
