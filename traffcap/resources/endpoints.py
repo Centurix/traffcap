@@ -1,4 +1,3 @@
-import asyncio
 from typing import (
     List,
     Dict
@@ -8,16 +7,30 @@ from fastapi import (
     HTTPException,
     WebSocket
 )
+from fastapi.encoders import jsonable_encoder
 from traffcap.endpoints import generate_code
 from traffcap.repositories import EndpointRepository
 from traffcap.libs.pydantic_jsonapi import JsonApiModel  # Factory
-from traffcap.dto.endpoint import Endpoint
-from time import sleep
+from traffcap.dto import (
+    Endpoint,
+    InboundRequest
+)
+from asyncio import sleep
+from traffcap.repositories.inbound_request_repository import InboundRequestRepository
+from websockets.exceptions import (
+    ConnectionClosedError,
+    ConnectionClosedOK
+)
+
+
+POLL_TIME = 5
 
 
 endpoints_router = APIRouter(prefix="/endpoints", tags=["Endpoint Management"])
 EndpointRequest, EndpointResponse = JsonApiModel("endpoints", Endpoint)
 EndpointRequestList, EndpointResponseList = JsonApiModel("endpoints", Endpoint, list_response=True)
+_, InboundRequestResponse = JsonApiModel("requests", InboundRequest)
+_, InboundRequestResponseList = JsonApiModel("requests", InboundRequest, list_response=True)
 
 
 @endpoints_router.get("/", response_model=EndpointResponseList)
@@ -69,9 +82,30 @@ async def websocket_endpoint(websocket: WebSocket, endpoint_code: str):
     """
     Send messages to the client for the nominated endpoint
     """
-    await websocket.accept()
+    try:
+        await websocket.accept()
 
-    while True:
-        # Find new messages and send them on
-        await asyncio.sleep(5)
-        await websocket.send_text("New message!")
+        last_request = None
+
+        # Sit in a loop waiting for messages
+        while True:
+            inbound_requests = await InboundRequestRepository.list_latest_requests_by_endpoint_code(endpoint_code, last_request)
+
+            # Now send the results back to the consumer
+            await websocket.send_json(
+                jsonable_encoder(InboundRequestResponseList(
+                    data=[InboundRequestResponseList.resource_object(
+                        id=inbound_request.id,
+                        attributes=inbound_request
+                    ) for inbound_request in inbound_requests]
+                )
+            ))
+
+            # Fetch the date/time of the last request
+            if inbound_requests:
+                # datetime from the last request
+                last_request = inbound_requests[-1].created
+
+            await sleep(POLL_TIME)
+    except (ConnectionClosedError, ConnectionClosedOK):
+        pass  # This is hit when a connection is closed
