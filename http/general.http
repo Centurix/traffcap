@@ -11,7 +11,16 @@ GET {{host}}/openapi.json HTTP/1.1
 ###
 GET {{host}}/endpoints/MTYzNjI1OTM2MDQyMQ HTTP/1.1
 ###
-GET {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+DELETE {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+###
+OPTIONS {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+###
+TRACE {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+###
+HEAD {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
 Accept-Version: 3
 ###
 POST {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
@@ -28,7 +37,37 @@ Content-Type: application/json
     }
 }
 ###
+PUT {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+Content-Type: application/json
+
+{
+    "data": {
+        "id": 1,
+        "type": "extracts",
+        "attributes": {
+            "name": "Chris"
+        }
+    }
+}
+###
+PATCH {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Accept-Version: 3
+Content-Type: application/json
+
+{
+    "data": {
+        "id": 1,
+        "type": "extracts",
+        "attributes": {
+            "name": "Chris"
+        }
+    }
+}
+###
 GET {{host}}/endpoints/MTYzNjI1OTM2MDQyMQ/requests HTTP/1.1
 ###
 GET {{host}}/requests HTTP/1.1
+###
+GET https://ennboo5c59dywcg.m.pipedream.net HTTP/1.1
 ###
