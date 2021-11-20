@@ -1,7 +1,4 @@
 from typing import (
-    Tuple,
-    List,
-    Dict,
     Optional,
     TypeVar
 )
@@ -9,6 +6,8 @@ from .row_factory import RowFactory
 from pydantic import BaseModel
 from datetime import datetime
 from fastapi import Request
+from fastapi.encoders import jsonable_encoder
+import json
 
 
 class InboundRequest(BaseModel, RowFactory):
@@ -16,31 +15,25 @@ class InboundRequest(BaseModel, RowFactory):
     code: str
     created: datetime = None
     modified: datetime = None
-    http_version: str
-    scheme: str
-    method: str
-    root_path: str
-    path: str
-    server: Tuple
-    client: Tuple
-    headers: List[Tuple]
-    path_params: Dict
-    query_string: str
+    scope: str = None
     body: bytes = None
 
     @classmethod
     async def from_request(cls, code: str, request: Request) -> TypeVar("T", bound="InboundRequest"):
+        scope_data = {
+            "http_version": request.scope.get("http_version", ""),
+            "scheme": request.scope.get("scheme", ""),
+            "method": request.scope.get("method", ""),
+            "root_path": request.scope.get("root_path", ""),
+            "path": request.scope.get("path", ""),
+            "server": request.scope.get("server", ""),
+            "client": request.scope.get("client", ""),
+            "headers": request.scope.get("headers", ""),
+            "path_params": request.scope.get("path_params", ""),
+            "query_string": request.scope.get("query_string", "")
+        }
         return cls(
             code=code,
-            http_version=request.scope.http_version,
-            scheme=request.scope.scheme,
-            method=request.scope.method,
-            root_path=request.scope.root_path,
-            path=request.scope.path,
-            server=request.scope.server,
-            client=request.scope.client,
-            headers=request.scope.headers,
-            path_params=request.scope.path_params,
-            query_string=request.scope.query_string,
+            scope=json.dumps(jsonable_encoder(scope_data)),
             body=await request.body()
         )
