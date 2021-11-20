@@ -5,6 +5,7 @@ from typing import (
 from .repository import Repository
 from fastapi import Request
 from traffcap.dto import InboundRequest
+from datetime import datetime
 
 
 class InboundRequestRepository(Repository):
@@ -15,8 +16,6 @@ class InboundRequestRepository(Repository):
         # * Base URL
         # * Headers
         inbound_request = await InboundRequest.from_request(code, request)
-
-        test = inbound_request.scope.json()
 
         await cls.execute(f"""
 INSERT INTO requests (
@@ -35,7 +34,7 @@ INSERT INTO requests (
 """,
     (
         code,
-        inbound_request.scope.json(),
+        inbound_request.scope,
         inbound_request.body
     ))
 
@@ -53,5 +52,48 @@ SELECT
 FROM
     requests
 """,
+            row_factory=InboundRequest
+        )
+
+    @classmethod
+    async def list_requests_by_endpoint_code(cls, endpoint_code: str) -> Optional[List[InboundRequest]]:
+        return await cls.execute(
+            """
+SELECT
+    id,
+    code,
+    created,
+    modified,
+    scope,
+    body
+FROM
+    requests
+WHERE
+    code = ?
+""",
+            (endpoint_code,),
+            row_factory=InboundRequest
+        )
+
+    @classmethod
+    async def list_latest_requests_by_endpoint_code(cls, endpoint_code: str, last_request: datetime) -> Optional[List[InboundRequest]]:
+        if not last_request:  # Send back everything
+            return await cls.list_requests_by_endpoint_code(endpoint_code)
+
+        return await cls.execute("""
+SELECT
+    id,
+    code,
+    created,
+    modified,
+    scope,
+    body
+FROM
+    requests
+WHERE
+    code = ? AND
+    created > ?
+""",
+            (endpoint_code, last_request),
             row_factory=InboundRequest
         )
