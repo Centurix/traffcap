@@ -1,5 +1,7 @@
 This repository is in early stages. There are lots of very broken RequestBin like projects out there, hopefully this will remain not-broken.
 
+This repository should stand-alone wherever you want to host it. That way you can send it sensitive data without worrying it'll steal stuff.
+
 TRAFFCAP
 ========
 
@@ -43,13 +45,13 @@ If you look in the http folder you'll see a general.http file. This contains how
 What's next?
 ============
 
-A lot of functionality in the frontend for creating and managing endpoints
-Notifications when request events arrive
-A way of specifying the response payloads when a request comes in
-Authentication of some kind
+* A lot of functionality in the frontend for creating and managing endpoints
+* Notifications when request events arrive
+* A way of specifying the response payloads when a request comes in
+* Authentication of some kind
 
 Future
 ======
 
-This will eventually packaged up as a pypi package and also be made available as a docker image on docker hub.
-Hopefully, this will be used in CICD stacks.
+* This will eventually packaged up as a pypi package and also be made available as a docker image on docker hub.
+* Hopefully, this will be used in CICD stacks.
