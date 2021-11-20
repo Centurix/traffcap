@@ -30,33 +30,34 @@ export default Vue.extend({
   name: 'Messages',
   components: {},
   data: () => ({
-    card_colors: {
-      "get": "#61affe",
-      "post": "#49cc90",
-      "put": "#fca130",
-      "patch": "#50e3c2",
-      "delete": "#f93e3e",
-      "head": "#9012fe",
-      "trace": "#000",
-      "options": "#0d5aa7"
-    },
+    connection: new WebSocket("ws://localhost:8000/requests/MTYzNjI1OTM2MDQyMQ/ws"),
+    card_colors: new Map([
+      ["get", "#61affe"],
+      ["post", "#49cc90"],
+      ["put", "#fca130"],
+      ["patch", "#50e3c2"],
+      ["delete", "#f93e3e"],
+      ["head", "#9012fe"],
+      ["trace", "#000"],
+      ["options", "#0d5aa7"]
+    ]),
     messages: []
   }),
   created() {
     setTimeout(this.refresh, 500)
   },
   methods: {
-    card_color(message) {
-      return this.card_colors[this.scope(message).method.toLowerCase()]
+    card_color(message: any): any {
+      return this.card_colors.get(this.scope(message).method.toLowerCase())
     },
-    called_url(message) {
+    called_url(message: any): any {
       let scope = this.scope(message)
       let server = scope.server.join(":")
       let query_string = (scope.query_string ? "?" + scope.query_string : "")
 
       return scope.scheme + "://" + server + scope.path + query_string
     },
-    scope(message) {
+    scope(message: any): any {
       return JSON.parse(message.attributes.scope)
     },
     refresh() {
@@ -68,10 +69,6 @@ export default Vue.extend({
           this.messages = this.messages.concat(JSON.parse(data).data)
         }
       }
-    },
-    sendMessage() {
-      console.log("Sending a message")
-      this.connection.send('{"data": {"type": "messages", "id": "abcdefg"}}')
     }
   }
 })
