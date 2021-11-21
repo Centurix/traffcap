@@ -71,3 +71,13 @@ GET {{host}}/requests HTTP/1.1
 ###
 GET https://ennboo5c59dywcg.m.pipedream.net HTTP/1.1
 ###
+POST {{host}}/r/MTYzNjI1OTM2MDQyMQ?id=2&stuff=abcd HTTP/1.1
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="pdf"; filename="anz_anz_first_free_days_visa.pdf"
+
+< /home/chris/Desktop/GAMEBOX_EN.pdf
+--WebAppBoundary--
+
+###

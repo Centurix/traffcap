@@ -26,6 +26,32 @@
 <script lang="ts">
 import Vue from 'vue'
 
+interface Message {
+  id: string,
+  type: string,
+  attributes: {
+    code: string,
+    created: string,
+    id: string,
+    modified: string,
+    scope: string,
+    body: string
+  }
+}
+
+interface Scope {
+  method: string,
+  client: Array<string>,
+  http_version: string,
+  scheme: string
+  headers: Array<string>,
+  query_string: string,
+  message: string,
+  path: string,
+  server: Array<string>
+}
+
+
 export default Vue.extend({
   name: 'Messages',
   components: {},
@@ -47,24 +73,22 @@ export default Vue.extend({
     setTimeout(this.refresh, 500)
   },
   methods: {
-    card_color(message: any): any {
-      return this.card_colors.get(this.scope(message).method.toLowerCase())
+    card_color(message: Message): string {
+      return this.card_colors.get(this.scope(message).method.toLowerCase()) ?? ""
     },
-    called_url(message: any): any {
+    called_url(message: Message): string {
       let scope = this.scope(message)
       let server = scope.server.join(":")
       let query_string = (scope.query_string ? "?" + scope.query_string : "")
 
       return scope.scheme + "://" + server + scope.path + query_string
     },
-    scope(message: any): any {
+    scope(message: Message): Scope {
       return JSON.parse(message.attributes.scope)
     },
     refresh() {
-      console.log("Starting websocket connection")
       this.connection = new WebSocket("ws://localhost:8000/requests/MTYzNjI1OTM2MDQyMQ/ws")
       this.connection.onopen = () => {
-        console.log("Connected to Traffcap, waiting for requests...")
         this.connection.onmessage = ({data}) => {
           this.messages = this.messages.concat(JSON.parse(data).data)
         }
